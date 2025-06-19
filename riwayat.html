@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>K9 Shoes - Penjualan Sepatu</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <style>
+      body {
+        font-family: "Montserrat", sans-serif;
+        background: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+      .table img {
+        max-width: 60px;
+      }
+      footer {
+        background: #222;
+        color: #ccc;
+        padding: 40px 0;
+        border-top: 4px solid #2575fc;
+      }
+      footer p {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">K9 Shoes</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Beranda</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="keranjang.html">Keranjang</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="riwayat.html">Riwayat Pesanan</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.html">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="py-5 bg-light">
+      <div class="container">
+        <h2 class="text-center mb-4">Bukti Pembelian</h2>
+        <div id="userInfo" class="mb-4"></div>
+        <h5>Daftar Produk:</h5>
+        <div id="cartTable"></div>
+        <div class="mt-4">
+          <a href="index.html" class="btn btn-primary">Kembali ke Home</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Riwayat Pesanan Section -->
+    <section class="py-5 bg-light">
+      <div class="container">
+        <h2 class="text-center mb-4">Riwayat Pesanan Anda</h2>
+        <div class="table-responsive">
+          <table
+            class="table table-bordered table-striped table-hover shadow-sm rounded"
+          >
+            <thead class="table-primary text-center">
+              <tr>
+                <th>#</th>
+                <th>Nama Produk</th>
+                <th>Harga</th>
+                <th>Jumlah</th>
+                <th>Total</th>
+                <th>Gambar</th>
+              </tr>
+            </thead>
+            <tbody
+              id="orderHistoryTable"
+              class="align-middle text-center"
+            ></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container text-center">
+        <p>&copy; 2025 K9 Shoes. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      function formatRupiah(angka) {
+        return "Rp " + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+
+      const checkoutData = JSON.parse(localStorage.getItem("checkoutData"));
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      if (checkoutData && cart.length > 0) {
+        const userInfo = `
+        <p><strong>Nama:</strong> ${checkoutData.fullname}</p>
+        <p><strong>Email:</strong> ${checkoutData.email}</p>
+        <p><strong>Alamat:</strong> ${checkoutData.address}, ${checkoutData.city}, ${checkoutData.province} (${checkoutData.zip})</p>
+        <p><strong>Metode Pembayaran:</strong> ${checkoutData.payment}</p>
+      `;
+        document.getElementById("userInfo").innerHTML = userInfo;
+
+        let tableHTML = `
+        <table class="table table-bordered mt-3">
+          <thead class="table-light">
+            <tr>
+              <th>Gambar</th>
+              <th>Produk</th>
+              <th>Harga</th>
+              <th>Jumlah</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+        let total = 0;
+        cart.forEach((item) => {
+          const subtotal = item.price * item.quantity;
+          total += subtotal;
+          tableHTML += `
+          <tr>
+            <td><img src="${item.image}" alt="${item.name}"></td>
+            <td>${item.name}</td>
+            <td>${formatRupiah(item.price)}</td>
+            <td>${item.quantity}</td>
+            <td>${formatRupiah(subtotal)}</td>
+          </tr>
+        `;
+        });
+
+        tableHTML += `
+        <tr>
+          <td colspan="4" class="text-end"><strong>Total</strong></td>
+          <td><strong>${formatRupiah(total)}</strong></td>
+        </tr>
+        </tbody></table>
+      `;
+
+        document.getElementById("cartTable").innerHTML = tableHTML;
+
+        const riwayat =
+          JSON.parse(localStorage.getItem("riwayatPembelian")) || [];
+        const newEntry = {
+          fullname: checkoutData.fullname,
+          email: checkoutData.email,
+          address: checkoutData.address,
+          city: checkoutData.city,
+          province: checkoutData.province,
+          zip: checkoutData.zip,
+          payment: checkoutData.payment,
+          tanggal: new Date().toLocaleString(),
+          items: cart,
+        };
+        riwayat.push(newEntry);
+        localStorage.setItem("riwayatPembelian", JSON.stringify(riwayat));
+
+        localStorage.removeItem("cart");
+        localStorage.removeItem("checkoutData");
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const table = document.getElementById("orderHistoryTable");
+        const riwayat =
+          JSON.parse(localStorage.getItem("riwayatPembelian")) || [];
+
+        if (riwayat.length === 0) {
+          table.innerHTML = `<tr><td colspan="6">Belum ada pesanan.</td></tr>`;
+          return;
+        }
+
+        let rows = "";
+        let count = 1;
+        riwayat.forEach((entry) => {
+          entry.items.forEach((item) => {
+            const total = item.price * item.quantity;
+            rows += `
+            <tr>
+              <td>${count++}</td>
+              <td>${item.name}</td>
+              <td>${formatRupiah(item.price)}</td>
+              <td>${item.quantity}</td>
+              <td>${formatRupiah(total)}</td>
+              <td><img src="${item.image}" alt="${
+              item.name
+            }" width="60" height="60"></td>
+            </tr>
+          `;
+          });
+        });
+
+        table.innerHTML = rows;
+      });
+    </script>
+  </body>
+</html>

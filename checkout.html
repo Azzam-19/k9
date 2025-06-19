@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - Webprojek</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(to right, #e0eafc, #cfdef3);
+        color: #333;
+        line-height: 1.6;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 3rem auto;
+        background: #fff;
+        padding: 2.5rem;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: #1e3a8a;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.2rem;
+        color: #374151;
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 0.5rem;
+      }
+
+      .grid {
+        display: grid;
+        gap: 2rem;
+      }
+
+      .two-col {
+        grid-template-columns: 3fr 2fr;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-weight: 600;
+        color: #4b5563;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        margin-bottom: 1.2rem;
+        font-size: 1rem;
+        transition: border 0.3s, box-shadow 0.3s;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+        outline: none;
+      }
+
+      .summary {
+        background: #f9fafb;
+        padding: 1.5rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+      }
+
+      .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+      }
+
+      .summary-item.total {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: #1e40af;
+      }
+
+      .btn {
+        display: inline-block;
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(to right, #3b82f6, #2563eb);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, background 0.3s;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        background: linear-gradient(to right, #2563eb, #1d4ed8);
+      }
+
+      @media (max-width: 768px) {
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+        .btn {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mb-4 text-center">
+      <a href="index.html" class="text-gray-600 hover:text-gray-900 font-bold"
+        ><i class="fas fa-arrow-left mr-2"></i>Back to Home</a
+      >
+    </div>
+    <div class="container">
+      <h1>Checkout</h1>
+      <div class="grid two-col">
+        <!-- Billing & Shipping Form -->
+        <section>
+          <h2>Billing & Shipping</h2>
+          <form onsubmit="handleCheckout(event)">
+            <label for="fullname">Full Name</label>
+            <input type="text" id="fullname" placeholder="John Doe" required />
+
+            <label for="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="john@example.com"
+              required
+            />
+
+            <label for="address">Address</label>
+            <input
+              type="text"
+              id="address"
+              placeholder="1234 Main St"
+              required
+            />
+
+            <label for="city">City</label>
+            <input type="text" id="city" placeholder="Jakarta" required />
+
+            <label for="province">Province</label>
+            <input
+              type="text"
+              id="province"
+              placeholder="DKI Jakarta"
+              required
+            />
+
+            <label for="zip">Postal Code</label>
+            <input type="text" id="zip" placeholder="12345" required />
+
+            <label for="payment-method">Payment Method</label>
+            <select id="payment-method" required>
+              <option value="credit_card">Credit Card</option>
+              <option value="bank_transfer">Bank Transfer</option>
+              <option value="e_wallet">E-Wallet</option>
+            </select>
+
+            <button type="submit" class="btn">Place Order</button>
+          </form>
+        </section>
+
+        <!-- Order Summary -->
+        <aside class="summary">
+          <h2>Order Summary</h2>
+          <div class="summary-item">
+            <span>Subtotal</span><span>IDR 500.000</span>
+          </div>
+          <div class="summary-item">
+            <span>Shipping</span><span>IDR 20.000</span>
+          </div>
+          <div class="summary-item total">
+            <span>Total</span><span>IDR 520.000</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <script>
+      function handleCheckout(event) {
+        event.preventDefault();
+
+        const data = {
+          fullname: document.getElementById("fullname").value,
+          email: document.getElementById("email").value,
+          address: document.getElementById("address").value,
+          city: document.getElementById("city").value,
+          province: document.getElementById("province").value,
+          zip: document.getElementById("zip").value,
+          payment: document.getElementById("payment-method").value,
+        };
+
+        // Simpan data ke localStorage
+        localStorage.setItem("checkoutData", JSON.stringify(data));
+
+        // Redirect ke halaman bukti pembelian
+        window.location.href = "buktipembelian.html";
+      }
+
+      // Cek apakah user sudah login
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
+      if (isLoggedIn !== "true") {
+        alert(
+          "Silakan login terlebih dahulu untuk mengakses halaman checkout."
+        );
+        localStorage.setItem("redirectAfterLogin", "checkout.html");
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
+</html>

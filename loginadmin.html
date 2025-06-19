@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin</title>
+    <style>
+        /* Styling untuk Halaman Login */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #ff7e5f, #feb47b); /* Warna background menarik */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #ff7e5f;
+            outline: none;
+        }
+
+        .btn-login {
+            background-color: #ff7e5f;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: #feb47b;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            color: green;
+            margin-bottom: 20px;
+        }
+
+        .forgot-password {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .forgot-password a {
+            color: #ff7e5f;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Login Admin</h2>
+
+        <!-- Pesan error atau sukses -->
+        <div id="message" class="error-message"></div>
+
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Masukkan username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Masukkan password" required>
+            </div>
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+
+        <div class="forgot-password">
+            <a href="#">Lupa Password?</a>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk menangani login
+        function handleLogin(event) {
+            event.preventDefault(); // Mencegah form dari refresh otomatis
+
+            // Mengambil nilai username dan password dari form
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            var message = document.getElementById('message');
+
+            // Validasi kolom kosong
+            if (!username || !password) {
+                message.innerHTML = "Username atau password tidak boleh kosong.";
+                message.classList.remove('success-message');
+                message.classList.add('error-message');
+                return false;
+            }
+
+            // Jika semua validasi berhasil, tampilkan pesan sukses dan arahkan ke homeadmin.html
+            message.innerHTML = "Login berhasil! Arahkan ke halaman admin.";
+            message.classList.remove('error-message');
+            message.classList.add('success-message');
+            
+            // Redirect ke halaman homeadmin.html
+            setTimeout(function() {
+                window.location.href = "homeadmin.html";
+            }, 1500); // Redirect setelah 1.5 detik
+
+            return false; // Menghentikan form dari pengiriman otomatis
+        }
+    </script>
+
+</body>
+</html>
